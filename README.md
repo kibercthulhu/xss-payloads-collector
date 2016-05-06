@@ -1,5 +1,3 @@
-## python
-
 # get_payloads.py
 
 Collects URLs submitted via full disclosure on OpenBugBounty.org
