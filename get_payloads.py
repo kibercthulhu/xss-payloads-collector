@@ -10,12 +10,13 @@ from Pastebin import PastebinAPI
 from time import sleep
 import datetime
 
+# global variables
 DOMAIN = "https://www.openbugbounty.org"
 
 def get_incidents(i):
     """
         Get submitted exposure incident page links
-        Requires page = page/1/ or page/2/, etc.
+        Requires page id so that it is possible to get older submissions
     """
     page = "page/" + str(i) + "/" 
     try:
@@ -45,6 +46,8 @@ def get_exposure(incident):
     except:
         return "Error getting page content..."
 
+    # this is necessary as some submissions contain POST payloads
+    # while others contain standard GET payloads
     try:
         if len(xss_link) > 1:
             # POST payload
@@ -86,12 +89,17 @@ def pb_generate_user_key(pb_devkey, pb_user, pb_pw):
 def pb_submit_paste(pb_devkey, content, pastename, pb_sessionkey, cat):
     """
         Submit the paste to Pastebin
+        This will end up in a list format
     """
     x = PastebinAPI()
     url = x.paste(pb_devkey, content, paste_name = pastename, api_user_key = pb_sessionkey, paste_private = cat)
     return url
 
 def cleanup(raw):
+    """
+        Cleaning up raw list
+        Remove duplicates / remove past errors
+    """
     raw = [x for x in raw if x is not None]
     uniq = []
     [uniq.append(i) for i in raw if not uniq.count(i)]
@@ -99,8 +107,8 @@ def cleanup(raw):
                     
 def main(pb_user, pb_devkey):
     """
-        Gather payloads every X hours and generate associated Pastebin links
-        Ex: add while True loop + sleep(86400) for 24 hours
+        Gather payloads and generate associated Pastebin links
+        TODO: extract actual payloads from URLs
     """
     # get user Pastebin password
     # + generate session key
