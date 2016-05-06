@@ -1,4 +1,5 @@
-# get_payloads.py
+# python
+### get_payloads.py
 
 Collects URLs submitted via full disclosure on OpenBugBounty.org
 Hostnames are stripped to keep the XSS payloads.
