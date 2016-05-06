@@ -12,11 +12,12 @@ import datetime
 
 DOMAIN = "https://www.openbugbounty.org"
 
-def get_incidents(page):
+def get_incidents(i):
     """
-        Get last 60 full exposure incident page links
+        Get submitted exposure incident page links
         Requires page = page/1/ or page/2/, etc.
     """
+    page = "page/" + str(i) + "/" 
     try:
         # possible to loop through /page/1/, /page/2/, etc. to get even more results
         page = requests.get(DOMAIN + "/incidents/" + page)
@@ -114,9 +115,8 @@ def main(pb_user, pb_devkey):
     raw = []
 
     for i in range(1, 1870):
-        page = "page/" + str(i) + "/"
         print "\t[*] Page " + str(i) + " of 1869"
-        for link in get_incidents(page):
+        for link in get_incidents(i):
             raw.append(get_exposure(link))
 
         # strip hostnames
